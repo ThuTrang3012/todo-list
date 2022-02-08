@@ -3,36 +3,45 @@ import { v4 as uuidv4 } from 'uuid';
 import "bootstrap/dist/css/bootstrap.min.css";
 import ToDoInput from "./components/ToDoInput";
 import ToDoList from "./components/ToDoList";
+
 class App extends Component {
-    state = {
-        items: [],
-        id: uuidv4(),
-        item: "",
-        editItem: false
-    };
+    constructor(props) {
+        super(props);
+        this.state = { 
+            items: [],
+            id: uuidv4(),
+            item: "",
+            editItem: false
+        };
+    }
+
     handleChange = e => {
         this.setState({
             item: e.target.value
         });
     };
     handleSubmit = e => {
-        e.preventDefault();
         const newItem = {
             id: this.state.id,
             title: this.state.item
         };
         const updatedItems = [...this.state.items, newItem];
 
+        // Lưu danh sách updatedItems vào localstorage
+
+        // 
         this.setState({
             items: updatedItems,
             item: "",
-            id: uuidv4(),
-            editItem: false
+            id: uuidv4()
         });
     };
     clearList = () => {
         this.setState({
-            items: []
+            items: [],
+            id: uuidv4(),
+            item: "",
+            editItem: false
         });
     };
     handleDelete = id => {
@@ -52,27 +61,25 @@ class App extends Component {
         });
     };
     render() {
-        return ( <
-            div className = "container" >
-            <
-            div className = "row" >
-            <
-            div className = "col-10 mx-auto col-md-8 mt-5" >
-            <
-            h3 className = "text-capitalize text-center" > todo input < /h3>  <
-            ToDoInput item = { this.state.item }
-            handleChange = { this.handleChange }
-            handleSubmit = { this.handleSubmit }
-            editItem = { this.state.editItem }
-            />  <
-            ToDoList items = { this.state.items }
-            clearList = { this.clearList }
-            handleDelete = { this.handleDelete }
-            handleEdit = { this.handleEdit }
-            />  <
-            /div >  <
-            /div>  <
-            /div >
+        return ( 
+        <div className = "container" >
+            <div className = "row" >
+                <div className = "col-10 mx-auto col-md-8 mt-5" >
+                    <ToDoInput 
+                        item = { this.state.item }
+                        handleChange = { this.handleChange }
+                        handleSubmit = { this.handleSubmit }
+                        editItem = { this.state.editItem }
+                    />
+                    <ToDoList 
+                        items = { this.state.items } // lấy từ localstorage
+                        clearList = { this.clearList }
+                        handleDelete = { this.handleDelete }
+                        handleEdit = { this.handleEdit }
+                    />  
+                </div>
+            </div>  
+        </div >
         );
     }
 }
